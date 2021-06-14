@@ -117,7 +117,8 @@
     <Compile Include="Native\CorsairLedColor.cs" />
     <Compile Include="Native\CorsairLedPosition.cs" />
     <Compile Include="Native\CorsairLedPositions.cs" />
-    <Compile Include="OpenSimplexNoise.cs" />
+    <Compile Include="Utils\ColorHelper.cs" />
+    <Compile Include="Utils\OpenSimplexNoise.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="CUESaberController.cs" />

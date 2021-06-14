@@ -3,8 +3,8 @@
   "id": "CUESaber",
   "name": "CUESaber",
   "author": "Zeitheron",
-  "version": "1.0.1",
-  "description": "",
+  "version": "1.0.2",
+  "description": "iCUE integration for Beat Saber!",
   "gameVersion": "1.16.2",
   "dependsOn": {
     "BSIPA": "^4.0.5"

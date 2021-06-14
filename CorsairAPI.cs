@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using CUESaber.Configuration;
 using CUESaber.Native;
+using CUESaber.Utils;
 using IPA.Utilities;
 using UnityEngine;
 using static BeatmapSaveData;
@@ -13,8 +15,30 @@ namespace CUESaber
 {
     public class CUEHandler
     {
+        public static bool hasSetup, adaptive;
+        public static long avgNoteRate;
+
+        private static Stopwatch levelStart;
+        private static int noteCount;
+
         public static void OnNoteCut(NoteCutInfo info, NoteData note, NoteController ___instance)
         {
+            if(!hasSetup)
+            {
+                hasSetup = true;
+                adaptive = PluginConfig.Instance.AdaptiveIntepolation;
+                avgNoteRate = PluginConfig.Instance.InterpolationTimeMS;
+                noteCount = 0;
+                levelStart = Stopwatch.StartNew();
+            }
+
+            noteCount++;
+
+            if (adaptive && levelStart != null && noteCount > 1)
+            {
+                avgNoteRate = levelStart.ElapsedMilliseconds / noteCount;
+            }
+
             try
             { 
                 CorsairAPI.OnNoteCut(info, note, ___instance);
@@ -26,6 +50,8 @@ namespace CUESaber
 
         public static void OnControllerDestroy()
         {
+            noteCount = 0;
+            hasSetup = false;
             try
             {
                 CorsairAPI.OnControllerDestroy();
@@ -40,36 +66,26 @@ namespace CUESaber
     internal class Led
     {
         readonly double x, y;
-        readonly CorsairLedId id;
 
         internal CorsairLedColor color;
-        internal float red, green, blue;
 
         public Led(CorsairLedPosition pos)
         {
             x = pos.left;
             y = pos.top;
-            id = pos.ledId;
             color = new CorsairLedColor();
             color.ledId = (int)pos.ledId;
         }
 
-        public void SetColor(Color color)
+        public void ApplyNoise(Interpolation interp, double time)
         {
-            red = color.r * 255;
-            green = color.g * 255;
-            blue = color.b * 255;
-        }
-
-        public void ApplyNoise(double time)
-        {
-            float noise = (float) (CorsairAPI.noise.Evaluate(x / 8.0, y / 8.0, time) + 1) / 2F;
+            float noise = (float) (CorsairAPI.noise.Evaluate(x / PluginConfig.Instance.NoiseScale, y / PluginConfig.Instance.NoiseScale, time) + 1) / 2F;
 
             noise = noise * noise * noise;
 
-            this.color.r = Mathf.RoundToInt(red * noise);
-            this.color.g = Mathf.RoundToInt(green * noise);
-            this.color.b = Mathf.RoundToInt(blue * noise);
+            this.color.r = Mathf.RoundToInt(interp.red * noise);
+            this.color.g = Mathf.RoundToInt(interp.green * noise);
+            this.color.b = Mathf.RoundToInt(interp.blue * noise);
 
             CorsairAPI.allLedsCorsair.Add(this.color);
         }
@@ -91,10 +107,16 @@ namespace CUESaber
 
         internal static IPALogger log;
 
+        internal static Interpolation interp = ColorHelper.BLACK_INTERP;
+
+        public static void SetColor(Color color)
+        {
+            interp = interp.Interpolate(CUEHandler.avgNoteRate, color.r * 255, color.g * 255, color.b * 255);
+        }
+
         internal static void OnControllerDestroy()
         {
-            foreach (Led l in allLeds)
-                l.SetColor(Color.black);
+            SetColor(Color.black);
         }
 
         internal static void OnNoteCut(NoteCutInfo info, NoteData note, NoteController ___instance)
@@ -111,17 +133,12 @@ namespace CUESaber
             if(info.allIsOK)
             {
                 if (noteType == NoteType.Bomb)
-                {
-                    foreach (Led l in allLeds)
-                        l.SetColor(Color.gray);
-                }
-                foreach (Led l in allLeds)
-                    l.SetColor(cutColor);
+                    SetColor(Color.gray);
+                else
+                    SetColor(cutColor);
             } else if(noteType != NoteType.None)
             {
-                Color col = noteType == NoteType.Bomb ? Color.gray : Color.black;
-                foreach (Led l in allLeds)
-                    l.SetColor(col);
+                SetColor(noteType == NoteType.Bomb ? Color.gray : Color.black);
             }
         }
 
@@ -129,8 +146,7 @@ namespace CUESaber
         {
             if(CUESDK.IsLoaded())
             {
-                stopwatch = new Stopwatch();
-                stopwatch.Start();
+                stopwatch = Stopwatch.StartNew();
 
                 noise = new OpenSimplexNoise();
 
@@ -177,12 +193,9 @@ namespace CUESaber
 
         private static void UpdateGrid()
         {
-            double second = stopwatch.ElapsedMilliseconds / 2000D;
-
+            double second = stopwatch.ElapsedMilliseconds / PluginConfig.Instance.NoiseDividerMS;
             foreach (Led l in allLeds)
-            {
-                l.ApplyNoise(second);
-            }
+                l.ApplyNoise(interp, second);
         }
 
         private static void RefreshDevices()
@@ -222,6 +235,11 @@ namespace CUESaber
             }
 
             ((AutoResetEvent)state).Set();
+        }
+
+        internal static long StopwatchTime()
+        {
+            return stopwatch.ElapsedMilliseconds;
         }
     }
 }
