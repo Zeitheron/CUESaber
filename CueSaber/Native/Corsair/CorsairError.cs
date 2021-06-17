@@ -1,7 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
 
-namespace CUESaber.Native
+namespace CUESaber.Native.Corsair
 {
     /// <summary>
     /// Shared list of all errors which could happen during calling of Corsair* functions.

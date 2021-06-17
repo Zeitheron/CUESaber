@@ -105,23 +105,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CorsairAPI.cs" />
-    <Compile Include="HarmonyPatches.cs" />
-    <Compile Include="Native\CorsairAccessMode.cs" />
-    <Compile Include="Native\CorsairDeviceType.cs" />
-    <Compile Include="Native\CorsairError.cs" />
-    <Compile Include="Native\CorsairLedId.cs" />
-    <Compile Include="Native\CUESDK.cs" />
-    <Compile Include="Native\CorsairProtocolDetails.cs" />
-    <Compile Include="Native\CorsairDeviceInfo.cs" />
-    <Compile Include="Native\CorsairLedColor.cs" />
-    <Compile Include="Native\CorsairLedPosition.cs" />
-    <Compile Include="Native\CorsairLedPositions.cs" />
-    <Compile Include="Utils\ColorHelper.cs" />
-    <Compile Include="Utils\OpenSimplexNoise.cs" />
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Configuration\PluginConfig.cs" />
-    <Compile Include="CUESaberController.cs" />
+    <Compile Include="CueSaber\RGBEngine.cs" />
+    <Compile Include="CueSaber\HarmonyPatches.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairAccessMode.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairDeviceType.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairError.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairLedId.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CUESDK.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairProtocolDetails.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairDeviceInfo.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairLedColor.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairLedPosition.cs" />
+    <Compile Include="CueSaber\Native\Corsair\CorsairLedPositions.cs" />
+    <Compile Include="CueSaber\Utils\ColorHelper.cs" />
+    <Compile Include="CueSaber\Utils\DebugLogger.cs" />
+    <Compile Include="CueSaber\Utils\NativeMemoryUtils.cs" />
+    <Compile Include="CueSaber\Utils\OpenSimplexNoise.cs" />
+    <Compile Include="CueSaber\Plugin.cs" />
+    <Compile Include="CueSaber\Configuration\PluginConfig.cs" />
+    <Compile Include="CueSaber\CUESaberController.cs" />
+    <Compile Include="CueSaber\Wrappers\ASUSWrapper.cs" />
+    <Compile Include="CueSaber\Wrappers\CorsairWrapper.cs" />
+    <Compile Include="CueSaber\Wrappers\Base.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +144,21 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="AuraServiceLib">
+      <Guid>{F1AA5209-5217-4B82-BA7E-A68198999AFA}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties manifest_1json__JsonSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

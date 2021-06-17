@@ -5,7 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace CUESaber.Native
+namespace CUESaber.Native.Corsair
 {
     // ReSharper disable once InconsistentNaming    
     /// <summary>

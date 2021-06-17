@@ -12,11 +12,17 @@ namespace CUESaber.Configuration
 
         public virtual long InterpolationTimeMS { get; set; } = 150L;
 
+        public virtual long AdaptiveInterpolationTimeMSMin { get; set; } = 50L;
+        public virtual long AdaptiveInterpolationTimeMSShift { get; set; } = 20L;
+        public virtual long AdaptiveInterpolationTimeMSMax { get; set; } = 500L;
+
         public virtual double NoiseDividerMS { get; set; } = 2000D;
 
         public virtual double NoiseScale { get; set; } = 8D;
 
         public virtual bool AdaptiveIntepolation { get; set; } = false;
+
+        public virtual bool DebugLogging { get; set; } = false;
 
         public virtual void OnReload()
         {

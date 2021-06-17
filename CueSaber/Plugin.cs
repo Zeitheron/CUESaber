@@ -1,16 +1,11 @@
 ﻿using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
 using HarmonyLib;
 using System.Reflection;
-using CUESaber.Native;
+using CUESaber.Native.Corsair;
 
 namespace CUESaber
 {
@@ -32,7 +27,6 @@ namespace CUESaber
         {
             Instance = this;
             Log = logger;
-            CorsairAPI.log = logger;
             Log.Info("CUESaber initialized.");
         }
 
@@ -44,7 +38,7 @@ namespace CUESaber
             Configuration.PluginConfig.Instance = conf.Generated<Configuration.PluginConfig>();
             CUESDK.Reload();
             Log.Debug("Config loaded");
-            CorsairAPI.Start();
+            RGBEngine.Start();
         }
         #endregion
 
@@ -60,7 +54,7 @@ namespace CUESaber
         [OnExit]
         public void OnApplicationQuit()
         {
-            CorsairAPI.Stop();
+            RGBEngine.Stop();
             Log.Debug("OnApplicationQuit");
         }
     }

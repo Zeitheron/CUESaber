@@ -65,7 +65,7 @@ namespace CUESaber.Utils
 
     public class ColorHelper
     {
-        public static long time { get { return CorsairAPI.StopwatchTime(); } }
+        public static long time { get { return RGBEngine.StopwatchTime(); } }
 
         public static Interpolation BLACK_INTERP = new Interpolation(0, 0, 0F, 0F, 0F, 0F, 0F, 0F);
     }

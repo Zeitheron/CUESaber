@@ -9,7 +9,7 @@ namespace CUESaber
     {
         private static void Postfix(in NoteCutInfo noteCutInfo, NoteData ____noteData, NoteController __instance)
         {
-            CUEHandler.OnNoteCut(noteCutInfo, ____noteData, __instance);
+            HarmonyHandler.OnNoteCut(noteCutInfo, ____noteData, __instance);
         }
     }
 
@@ -19,7 +19,7 @@ namespace CUESaber
     {
         private static void Postfix()
         {
-            CUEHandler.OnControllerDestroy();
+            HarmonyHandler.OnControllerDestroy();
         }
     }
 }

@@ -2,10 +2,11 @@
 #pragma warning disable 414 // Field 'x' is assigned but its value never used
 #pragma warning disable 649 // Field 'x' is never assigned
 
+using CUESaber.Utils;
 using System;
 using System.Runtime.InteropServices;
 
-namespace CUESaber.Native
+namespace CUESaber.Native.Corsair
 {
     // ReSharper disable once InconsistentNaming
     /// <summary>
@@ -27,7 +28,7 @@ namespace CUESaber.Native
         internal CorsairLedPosition[] GetPositions()
         {
             CorsairLedPosition[] positions;
-            CUESDK.MarshalUnmananagedArray2Struct(pLedPosition, numberOfLed, out positions);
+            NativeMemoryUtils.MarshalUnmananagedArray2Struct(pLedPosition, numberOfLed, out positions);
             return positions;
         }
 
