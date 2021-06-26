@@ -19,7 +19,7 @@ namespace CUESaber.CueSaber.Wrappers
             List<IRGBManufacturer> c = new List<IRGBManufacturer>();
 
             c.Add(new CorsairWrapper()); // iCUE (Corsair)
-            c.Add(new ASUSWrapper()); // Aura Sync (ASUS)
+            // c.Add(new ASUSWrapper()); // Aura Sync (ASUS)
 
             return new GlobalRGBWrapper(c);
         }

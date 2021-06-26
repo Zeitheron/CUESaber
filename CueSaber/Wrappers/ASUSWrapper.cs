@@ -1,14 +1,14 @@
 ﻿using AuraServiceLib;
 using CUESaber.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace CUESaber.CueSaber.Wrappers
 {
+    /*
+     * This has no sense if one already uses iCUE since it may control ASUS motherboards,
+     * which also means CorsairWrapper will pickup the Aura SDK and handle all the dirty work behind the scenese.
+     */
     class ASUSWrapper : IRGBManufacturer
     {
         private static IAuraSdk2 sdk;

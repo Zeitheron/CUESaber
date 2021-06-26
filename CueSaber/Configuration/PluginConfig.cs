@@ -9,6 +9,7 @@ namespace CUESaber.Configuration
         public static PluginConfig Instance { get; set; }
 
         public virtual string CUESDKPath { get; set; } = "Libs/Native/CUESDK";
+        public virtual string LogitechGPath { get; set; } = "Libs/Native/LogitechLedEnginesWrapper";
 
         public virtual long InterpolationTimeMS { get; set; } = 150L;
 

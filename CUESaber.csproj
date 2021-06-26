@@ -105,6 +105,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CueSaber\Native\Logitech\LogiKeyboard.cs" />
+    <Compile Include="CueSaber\Native\Logitech\LogitechGSDK.cs" />
+    <Compile Include="CueSaber\Utils\Rectangle.cs" />
     <Compile Include="CueSaber\RGBEngine.cs" />
     <Compile Include="CueSaber\HarmonyPatches.cs" />
     <Compile Include="CueSaber\Native\Corsair\CorsairAccessMode.cs" />
@@ -123,10 +126,10 @@
     <Compile Include="CueSaber\Utils\OpenSimplexNoise.cs" />
     <Compile Include="CueSaber\Plugin.cs" />
     <Compile Include="CueSaber\Configuration\PluginConfig.cs" />
-    <Compile Include="CueSaber\CUESaberController.cs" />
     <Compile Include="CueSaber\Wrappers\ASUSWrapper.cs" />
     <Compile Include="CueSaber\Wrappers\CorsairWrapper.cs" />
     <Compile Include="CueSaber\Wrappers\Base.cs" />
+    <Compile Include="CueSaber\Wrappers\LogitechWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

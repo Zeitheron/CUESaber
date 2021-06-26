@@ -12,6 +12,8 @@ namespace CUESaber
     [Plugin(RuntimeOptions.SingleStartInit)]
     public class Plugin
     {
+        public static readonly string PLUGIN_NAME = "CUE Saber";
+
         internal static Harmony harmony;
 
         internal static Plugin Instance { get; private set; }
@@ -27,7 +29,7 @@ namespace CUESaber
         {
             Instance = this;
             Log = logger;
-            Log.Info("CUESaber initialized.");
+            Log.Info(PLUGIN_NAME + " initialized.");
         }
 
         #region BSIPA Config
@@ -48,7 +50,6 @@ namespace CUESaber
             Log.Debug("OnApplicationStart");
             harmony = new Harmony("org.zeith.BeatSaber.CUESaber");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-            new GameObject("CUESaberController").AddComponent<CUESaberController>();
         }
 
         [OnExit]
