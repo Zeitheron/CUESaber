@@ -1,18 +1,17 @@
 ﻿using CUESaber.Native.Corsair;
 using CUESaber.Utils;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CUESaber.CueSaber.Wrappers
 {
-    internal class Led : IRGBZone
+    internal class CUELed : IRGBZone
     {
         readonly double x, y;
 
         internal CorsairLedColor color;
 
-        public Led(CorsairLedPosition pos)
+        public CUELed(CorsairLedPosition pos)
         {
             x = pos.left;
             y = pos.top;
@@ -27,13 +26,6 @@ namespace CUESaber.CueSaber.Wrappers
             SetRGB(currentInterpolation.red * mul, currentInterpolation.green * mul, currentInterpolation.blue * mul);
         }
 
-        public void SetRGB(int red, int green, int blue)
-        {
-            this.color.r = red;
-            this.color.g = green;
-            this.color.b = blue;
-        }
-
         public void SetRGB(float red, float green, float blue)
         {
             this.color.r = Mathf.RoundToInt(red * 255F);
@@ -46,7 +38,7 @@ namespace CUESaber.CueSaber.Wrappers
     class CorsairWrapper : IRGBManufacturer
     {
         private List<CorsairLedColor> allLedsCorsair = new List<CorsairLedColor>();
-        private List<Led> allLeds = new List<Led>();
+        private List<CUELed> allLeds = new List<CUELed>();
         private int deviceCount;
 
         private void RefreshDevices()
@@ -58,7 +50,7 @@ namespace CUESaber.CueSaber.Wrappers
                 CorsairLedPosition[] positions = CorsairLedPositions.FromPtr(CUESDK.CorsairGetLedPositionsByDeviceIndex(i)).GetPositions();
                 foreach (CorsairLedPosition pos in positions)
                 {
-                    Led led = new Led(pos);
+                    CUELed led = new CUELed(pos);
                     allLeds.Add(led);
                     allLedsCorsair.Add(led.color);
                 }
@@ -107,7 +99,7 @@ namespace CUESaber.CueSaber.Wrappers
                 DebugLogger.debug("[iCUE] Total led count refreshed to: " + allLeds.Count);
             }
 
-            foreach (Led l in allLeds)
+            foreach (CUELed l in allLeds)
             {
                 l.ApplyNoise(currentInterpolation, noise);
             }
@@ -120,6 +112,8 @@ namespace CUESaber.CueSaber.Wrappers
         {
             DebugLogger.debug("Shutting Down iCUE SDK.");
             CUESDK.Shutdown();
+            allLeds.Clear();
+            allLedsCorsair.Clear();
         }
     }
 }

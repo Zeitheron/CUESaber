@@ -189,7 +189,7 @@ namespace CUESaber.Native.Logitech
 
             if (dllPath == null)
             {
-                Plugin.Log.Error($"Can't find the CUE-SDK at the expected location: '{Path.GetFullPath(target)}'");
+                Plugin.Log.Error($"Can't find the LogitechG-SDK at the expected location: '{Path.GetFullPath(target)}'");
                 return;
             }
 

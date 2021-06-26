@@ -20,6 +20,7 @@ namespace CUESaber.CueSaber.Wrappers
 
             c.Add(new CorsairWrapper()); // iCUE (Corsair)
             // c.Add(new ASUSWrapper()); // Aura Sync (ASUS)
+            c.Add(new LogitechWrapper()); // LogitechG (self-explanatory)
 
             return new GlobalRGBWrapper(c);
         }
@@ -48,7 +49,6 @@ namespace CUESaber.CueSaber.Wrappers
 
     public interface IRGBZone
     {
-        void SetRGB(int red, int green, int blue);
         void SetRGB(float red, float green, float blue);
         void SetRGB(Color color);
         void ApplyNoise(Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise);
