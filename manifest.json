@@ -3,7 +3,7 @@
   "id": "CUESaber",
   "name": "CUESaber",
   "author": "Zeitheron",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "RGB integration for Beat Saber!",
   "gameVersion": "1.16.2",
   "dependsOn": {

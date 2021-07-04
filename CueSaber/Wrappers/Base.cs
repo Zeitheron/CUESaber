@@ -1,4 +1,5 @@
 ﻿using CUESaber.Utils;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,7 +28,18 @@ namespace CUESaber.CueSaber.Wrappers
 
         public bool Start()
         {
-            this.children.RemoveAll(m => !m.Start());
+            this.children.RemoveAll(m =>
+            {
+                try
+                {
+                    return !m.Start();
+                } catch (Exception err)
+                {
+                    Plugin.Log.Error("Failed to load RGB engine " + m.GetType().Name);
+                    Plugin.Log.Error(err);
+                    return true;
+                }
+            });
             return this.children.Count > 0;
         }
 
