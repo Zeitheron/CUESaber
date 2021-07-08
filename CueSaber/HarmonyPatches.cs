@@ -7,7 +7,7 @@ namespace CUESaber
     [HarmonyPatch("SendNoteWasCutEvent", MethodType.Normal)]
     internal static class SendNoteWasCutEvent
     {
-        private static void Postfix(in NoteCutInfo noteCutInfo, NoteData ____noteData, NoteController __instance)
+        private static void Postfix(in NoteCutInfo noteCutInfo, BeatmapSaveData.NoteData ____noteData, NoteController __instance)
         {
             HarmonyHandler.OnNoteCut(noteCutInfo, ____noteData, __instance);
         }

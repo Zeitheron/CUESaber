@@ -6,6 +6,7 @@ using IPALogger = IPA.Logging.Logger;
 using HarmonyLib;
 using System.Reflection;
 using CUESaber.Native.Corsair;
+using CUESaber.CueSaber.Compat;
 
 namespace CUESaber
 {
@@ -50,6 +51,8 @@ namespace CUESaber
             Log.Debug("OnApplicationStart");
             harmony = new Harmony("org.zeith.BeatSaber.CUESaber");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+            Compats.Setup();
         }
 
         [OnExit]

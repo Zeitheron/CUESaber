@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using CUESaber.Configuration;
+using CUESaber.CueSaber.Compat;
 using CUESaber.CueSaber.Wrappers;
 using CUESaber.Utils;
 using IPA.Utilities;
@@ -17,22 +18,45 @@ namespace CUESaber
 
         private static Stopwatch levelStart;
 
-        public static void OnNoteCut(NoteCutInfo info, NoteData note, NoteController ___instance)
+        private static NoteType[] lastCut = new NoteType[2];
+        private static long[] cutMs = new long[2];
+
+        public static void OnNoteCut(NoteCutInfo info, BeatmapSaveData.NoteData note, NoteController ___instance)
         {
-            if(!hasSetup)
+            if (!hasSetup)
             {
                 hasSetup = true;
                 adaptive = PluginConfig.Instance.AdaptiveIntepolation;
                 avgNoteRate = PluginConfig.Instance.InterpolationTimeMS;
                 levelStart = Stopwatch.StartNew();
+                Array.Fill(lastCut, NoteType.None);
+                Array.Fill(cutMs, 0L);
             }
 
-            if(levelStart != null)
+            NoteType nType = note.type;
+
+            long msSinceLastCut = -1L;
+
+            if (levelStart != null)
             {
-                long msSinceLastCut = levelStart.ElapsedMilliseconds;
+                msSinceLastCut = levelStart.ElapsedMilliseconds;
                 levelStart = Stopwatch.StartNew();
 
-                if(adaptive)
+                if (msSinceLastCut < 25L)
+                {
+                    bool a = note.type == NoteType.NoteA;
+                    bool b = note.type == NoteType.NoteB;
+                    if (lastCut[0] != note.type && lastCut[1] == note.type && (a || b))
+                    // Make the opposite since we cut it just previosly
+                    {
+                        nType = lastCut[0];
+                        msSinceLastCut = cutMs[0];
+                    }
+                }
+
+                insertNote(note.type, msSinceLastCut);
+
+                if (adaptive)
                 {
                     long msMax = PluginConfig.Instance.AdaptiveInterpolationTimeMSMax;
                     long msMin = PluginConfig.Instance.AdaptiveInterpolationTimeMSMin;
@@ -66,8 +90,8 @@ namespace CUESaber
 
             try
             {
-                DebugLogger.debug("Cut " + note.type);
-                RGBEngine.OnNoteCut(info, note, ___instance);
+                DebugLogger.debug("Cut " + note.type + ", took about " + msSinceLastCut + " ms.");
+                RGBEngine.OnNoteCut(info, nType, ___instance);
             } catch(Exception err)
             {
                 Plugin.Log.Error(err);
@@ -77,6 +101,8 @@ namespace CUESaber
         public static void OnControllerDestroy()
         {
             hasSetup = false;
+            Array.Fill(lastCut, NoteType.None);
+            Array.Fill(cutMs, 0L);
             try
             {
                 RGBEngine.OnControllerDestroy();
@@ -85,6 +111,15 @@ namespace CUESaber
             {
                 Plugin.Log.Error(err);
             }
+        }
+
+        private static void insertNote(NoteType type, long msSinceHit)
+        {
+            cutMs[1] = cutMs[0];
+            cutMs[0] = msSinceHit;
+
+            lastCut[1] = lastCut[0];
+            lastCut[0] = type;
         }
     }
 
@@ -108,18 +143,17 @@ namespace CUESaber
             SetColor(Color.black);
         }
 
-        internal static void OnNoteCut(NoteCutInfo info, NoteData note, NoteController ___instance)
+        internal static void OnNoteCut(NoteCutInfo info, NoteType noteType, NoteController ___instance)
         {
             ColorNoteVisuals visuals = ___instance.GetComponent<ColorNoteVisuals>();
             if (visuals == null) return;
 
             ColorManager mgr = FieldAccessor< ColorNoteVisuals, ColorManager>.Get(ref visuals, "_colorManager");
 
-            NoteType noteType = note.type;
-
             Color cutColor = mgr.ColorForSaberType(info.saberType);
+            cutColor = NoteColorOverrides.HandleColorOverride(cutColor, ___instance);
 
-            if(info.allIsOK)
+            if (info.allIsOK)
             {
                 if (noteType == NoteType.Bomb)
                     SetColor(Color.gray);
@@ -174,6 +208,7 @@ namespace CUESaber
             try
             {
                 time = stopwatch.ElapsedMilliseconds / PluginConfig.Instance.NoiseDividerMS;
+                noisePower = PluginConfig.Instance.NoisePower;
                 RGB.Update(interp, GenNoise);
             }
             catch(Exception err)
@@ -184,10 +219,12 @@ namespace CUESaber
             ((AutoResetEvent)state).Set();
         }
 
+        public static double noisePower;
+
         public static float GenNoise(double x, double y)
         {
             float noise = (float)(RGBEngine.noise.Evaluate(x / PluginConfig.Instance.NoiseScale, y / PluginConfig.Instance.NoiseScale, time) + 1) / 2F;
-            noise = noise * noise * noise;
+            noise = (float) Math.Pow(noise, noisePower);
             return Math.Min(1F, Math.Max(0F, noise));
         }
 

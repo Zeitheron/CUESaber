@@ -20,6 +20,7 @@ namespace CUESaber.Configuration
         public virtual double NoiseDividerMS { get; set; } = 2000D;
 
         public virtual double NoiseScale { get; set; } = 8D;
+        public virtual double NoisePower { get; set; } = 2.5D;
 
         public virtual bool AdaptiveIntepolation { get; set; } = false;
 
