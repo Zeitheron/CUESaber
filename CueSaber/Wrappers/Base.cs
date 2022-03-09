@@ -48,7 +48,7 @@ namespace CUESaber.CueSaber.Wrappers
             this.children.ForEach(m => m.Stop());
         }
 
-        public void Update(Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
+        public void Update(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
         {
             this.children.ForEach(m => m.Update(currentInterpolation, noise));
         }
@@ -63,14 +63,14 @@ namespace CUESaber.CueSaber.Wrappers
     {
         void SetRGB(float red, float green, float blue);
         void SetRGB(Color color);
-        void ApplyNoise(Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise);
+        void ApplyNoise(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise);
     }
 
     public interface IRGBManufacturer
     {
         bool Start();
 
-        void Update(Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise);
+        void Update(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise);
 
         void Stop();
     }

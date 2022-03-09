@@ -51,7 +51,7 @@
     </Reference>
     <Reference Include="Chroma, Version=2.4.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Steam\steamapps\common\Beat Saber\Plugins\Chroma.dll</HintPath>
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Beat Saber\Old 1.19.1 Plugins\Chroma.dll</HintPath>
     </Reference>
     <Reference Include="Colors, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

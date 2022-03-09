@@ -43,7 +43,7 @@ namespace CUESaber.CueSaber.Wrappers
             sdk.ReleaseControl(0);
         }
 
-        public void Update(Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
+        public void Update(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
         {
             IAuraSyncDeviceCollection devices = sdk.Enumerate(0);
 

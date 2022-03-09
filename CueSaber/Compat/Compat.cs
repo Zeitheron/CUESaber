@@ -33,14 +33,14 @@ namespace CUESaber.CueSaber.Compat
     {
         public static List<GetOverrideColor> overrides = new List<GetOverrideColor>();
 
-        public delegate Color GetOverrideColor(NoteController controller);
+        public delegate Color? GetOverrideColor(NoteController controller);
 
         public static Color HandleColorOverride(Color baseColor, NoteController controller)
         {
             foreach (GetOverrideColor o in overrides)
             {
-                Color c = o(controller);
-                if (c != null) return c;
+                Color? c = o(controller);
+                if (c != null) return c.GetValueOrDefault();
             }
             return baseColor;
         }

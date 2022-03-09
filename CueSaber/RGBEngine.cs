@@ -7,7 +7,6 @@ using CUESaber.CueSaber.Wrappers;
 using CUESaber.Utils;
 using IPA.Utilities;
 using UnityEngine;
-using static BeatmapSaveData;
 
 namespace CUESaber
 {
@@ -18,10 +17,10 @@ namespace CUESaber
 
         private static Stopwatch levelStart;
 
-        private static NoteType[] lastCut = new NoteType[2];
+        private static ColorType[] lastCut = new ColorType[2];
         private static long[] cutMs = new long[2];
 
-        public static void OnNoteCut(NoteCutInfo info, BeatmapSaveData.NoteData note, NoteController ___instance)
+        public static void OnNoteCut(NoteCutInfo info, NoteData note, NoteController ___instance)
         {
             if (!hasSetup)
             {
@@ -29,11 +28,11 @@ namespace CUESaber
                 adaptive = PluginConfig.Instance.AdaptiveIntepolation;
                 avgNoteRate = PluginConfig.Instance.InterpolationTimeMS;
                 levelStart = Stopwatch.StartNew();
-                Array.Fill(lastCut, NoteType.None);
+                Array.Fill(lastCut, ColorType.None);
                 Array.Fill(cutMs, 0L);
             }
 
-            NoteType nType = note.type;
+            ColorType nType = note.colorType;
 
             long msSinceLastCut = -1L;
 
@@ -44,9 +43,9 @@ namespace CUESaber
 
                 if (msSinceLastCut < 25L)
                 {
-                    bool a = note.type == NoteType.NoteA;
-                    bool b = note.type == NoteType.NoteB;
-                    if (lastCut[0] != note.type && lastCut[1] == note.type && (a || b))
+                    bool a = note.colorType == ColorType.ColorA;
+                    bool b = note.colorType == ColorType.ColorB;
+                    if (lastCut[0] != note.colorType && lastCut[1] == note.colorType && (a || b))
                     // Make the opposite since we cut it just previosly
                     {
                         nType = lastCut[0];
@@ -54,7 +53,7 @@ namespace CUESaber
                     }
                 }
 
-                insertNote(note.type, msSinceLastCut);
+                insertNote(note.colorType, msSinceLastCut);
 
                 if (adaptive)
                 {
@@ -101,7 +100,7 @@ namespace CUESaber
         public static void OnControllerDestroy()
         {
             hasSetup = false;
-            Array.Fill(lastCut, NoteType.None);
+            Array.Fill(lastCut, ColorType.None);
             Array.Fill(cutMs, 0L);
             try
             {
@@ -113,7 +112,7 @@ namespace CUESaber
             }
         }
 
-        private static void insertNote(NoteType type, long msSinceHit)
+        private static void insertNote(ColorType type, long msSinceHit)
         {
             cutMs[1] = cutMs[0];
             cutMs[0] = msSinceHit;
@@ -129,7 +128,7 @@ namespace CUESaber
         private static AutoResetEvent autoEvent;
         private static Stopwatch stopwatch;
         internal static OpenSimplexNoise noise;
-        internal static Interpolation interp = ColorHelper.BLACK_INTERP;
+        internal static Utils.Interpolation interp = ColorHelper.BLACK_INTERP;
 
         private static GlobalRGBWrapper RGB;
 
@@ -143,7 +142,7 @@ namespace CUESaber
             SetColor(Color.black);
         }
 
-        internal static void OnNoteCut(NoteCutInfo info, NoteType noteType, NoteController ___instance)
+        internal static void OnNoteCut(NoteCutInfo info, ColorType noteType, NoteController ___instance)
         {
             ColorNoteVisuals visuals = ___instance.GetComponent<ColorNoteVisuals>();
             if (visuals == null) return;
@@ -155,13 +154,13 @@ namespace CUESaber
 
             if (info.allIsOK)
             {
-                if (noteType == NoteType.Bomb)
+                if (info.noteData.gameplayType == NoteData.GameplayType.Bomb)
                     SetColor(Color.gray);
                 else
                     SetColor(cutColor);
-            } else if(noteType != NoteType.None)
+            } else if(noteType != ColorType.None)
             {
-                SetColor(noteType == NoteType.Bomb ? Color.gray : Color.black);
+                SetColor(info.noteData.gameplayType == NoteData.GameplayType.Bomb ? Color.gray : Color.black);
             }
         }
 

@@ -16,10 +16,10 @@ namespace CueSaber.Compat.Chroma
             NoteColorOverrides.overrides.Add(overrideColor);
         }
 
-        public static Color GetNoteColor(NoteControllerBase controllerBase)
+        public static Color? GetNoteColor(NoteControllerBase controllerBase)
         {
             NoteColorizer c = controllerBase.GetNoteColorizer();
-            return c.Color;
+            return c?.Color;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace CUESaber.CueSaber.Wrappers
             this.color.ledId = (int)pos.ledId;
         }
 
-        public void ApplyNoise(Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
+        public void ApplyNoise(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
         {
             float mul = noise.Invoke(x, y);
             SetRGB(currentInterpolation.red * mul, currentInterpolation.green * mul, currentInterpolation.blue * mul);
@@ -88,7 +88,7 @@ namespace CUESaber.CueSaber.Wrappers
             return false;
         }
 
-        public void Update(Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
+        public void Update(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
         {
             int devices = CUESDK.CorsairGetDeviceCount();
 
