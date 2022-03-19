@@ -226,6 +226,11 @@ namespace CUESaber
             noise = (float) Math.Pow(noise, noisePower);
             return Math.Min(1F, Math.Max(0F, noise));
         }
+        
+        public static float RearrangeFV(float norm, float min, float max)
+        {
+            return min + (norm * (max - min));
+        }
 
         internal static long StopwatchTime()
         {

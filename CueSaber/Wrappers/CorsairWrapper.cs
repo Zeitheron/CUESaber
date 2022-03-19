@@ -17,7 +17,7 @@ namespace CUESaber.CueSaber.Wrappers
             y = pos.top;
 
             this.color = new CorsairLedColor();
-            this.color.ledId = (int)pos.ledId;
+            this.color.ledId = (int) pos.ledId;
         }
 
         public void ApplyNoise(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
@@ -47,10 +47,10 @@ namespace CUESaber.CueSaber.Wrappers
             allLedsCorsair.Clear();
             for (int i = 0; i < deviceCount; ++i)
             {
-                CorsairLedPosition[] positions = CorsairLedPositions.FromPtr(CUESDK.CorsairGetLedPositionsByDeviceIndex(i)).GetPositions();
-                foreach (CorsairLedPosition pos in positions)
+                var positions = CorsairLedPositions.FromPtr(CUESDK.CorsairGetLedPositionsByDeviceIndex(i)).GetPositions();
+                foreach (var pos in positions)
                 {
-                    CUELed led = new CUELed(pos);
+                    var led = new CUELed(pos);
                     allLeds.Add(led);
                     allLedsCorsair.Add(led.color);
                 }
@@ -61,30 +61,29 @@ namespace CUESaber.CueSaber.Wrappers
         {
             if (CUESDK.IsLoaded())
             {
-                DebugLogger.debug("iCUE SDK Loaded!");
+                Plugin.Log.Info("iCUE SDK Loaded!");
 
-                CorsairProtocolDetails protocol = CUESDK.CorsairPerformProtocolHandshake();
+                var protocol = CUESDK.CorsairPerformProtocolHandshake();
 
-                DebugLogger.debug("Performed handshake with iCUE: " + protocol);
+                Plugin.Log.Info("Performed handshake with iCUE: " + protocol);
 
                 if (!protocol.breakingChanges)
                 {
                     if (CUESDK.CorsairRequestControl(CorsairAccessMode.ExclusiveLightingControl))
                     {
-                        DebugLogger.debug("iCUE exclusive light control provided!");
+                        Plugin.Log.Info("iCUE exclusive light control provided!");
                         return true;
                     }
                     else
                     {
-                        CorsairError err = CUESDK.CorsairGetLastError();
+                        var err = CUESDK.CorsairGetLastError();
 
-                        DebugLogger.debug($"iCUE exclusive light control was NOT provided, shutting down SDK! Error: {err}");
+                        Plugin.Log.Error($"iCUE exclusive light control was NOT provided, shutting down SDK! Error: {err}");
 
                         CUESDK.Shutdown();
                     }
-                }
-                else DebugLogger.debug("iCUE seems to have breaking changes, SDK will not be enabled!");
-            }
+                } else Plugin.Log.Error("iCUE seems to have breaking changes, SDK will not be enabled!");
+            } else Plugin.Log.Error("iCUE seems to be missing or the SDK support is disabled.");
             return false;
         }
 
@@ -96,10 +95,10 @@ namespace CUESaber.CueSaber.Wrappers
             {
                 deviceCount = devices;
                 RefreshDevices();
-                DebugLogger.debug("[iCUE] Total led count refreshed to: " + allLeds.Count);
+                Plugin.Log.Info("[iCUE] Total led count refreshed to: " + allLeds.Count);
             }
 
-            foreach (CUELed l in allLeds)
+            foreach (var l in allLeds)
             {
                 l.ApplyNoise(currentInterpolation, noise);
             }
@@ -110,7 +109,7 @@ namespace CUESaber.CueSaber.Wrappers
 
         public void Stop()
         {
-            DebugLogger.debug("Shutting Down iCUE SDK.");
+            Plugin.Log.Info("Shutting Down iCUE SDK.");
             CUESDK.Shutdown();
             allLeds.Clear();
             allLedsCorsair.Clear();

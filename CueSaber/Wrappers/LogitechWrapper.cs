@@ -21,7 +21,7 @@ namespace CUESaber.CueSaber.Wrappers
 
         public void ApplyNoise(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
         {
-            float mul = noise.Invoke(x, y);
+            float mul = RGBEngine.RearrangeFV(noise.Invoke(x, y), 0.35F, 1F);
             SetRGB(currentInterpolation.red * mul, currentInterpolation.green * mul, currentInterpolation.blue * mul);
         }
 
@@ -47,7 +47,7 @@ namespace CUESaber.CueSaber.Wrappers
 
         public void ApplyNoise(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
         {
-            float mul = noise.Invoke(x, y);
+            float mul = RGBEngine.RearrangeFV(noise.Invoke(x, y), 0.35F, 1F);
             SetRGB(currentInterpolation.red * mul, currentInterpolation.green * mul, currentInterpolation.blue * mul);
         }
 
@@ -69,6 +69,8 @@ namespace CUESaber.CueSaber.Wrappers
         {
             if (LogitechGSDK.LogiLedInitWithName(Plugin.PLUGIN_NAME))
             {
+                Plugin.Log.Info("LogitechG SDK connected successfully.");
+
                 LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
                 LogitechGSDK.LogiLedSetLighting(0, 0, 0);
 
@@ -77,20 +79,21 @@ namespace CUESaber.CueSaber.Wrappers
                 allLeds.Add(new LogiLedSingleLight(126));
 
                 return true;
-            }
+            } else Plugin.Log.Error("LogitechG seems to be missing or the SDK support is disabled.");
 
             return false;
         }
 
         public void Stop()
         {
+            Plugin.Log.Info("Shutting Down LogitechG SDK.");
             LogitechGSDK.LogiLedShutdown();
             allLeds.Clear();
         }
 
         public void Update(Utils.Interpolation currentInterpolation, RGBMethods.GetNoiseMult noise)
         {
-            foreach (IRGBZone l in allLeds)
+            foreach (var l in allLeds)
             {
                 l.ApplyNoise(currentInterpolation, noise);
             }

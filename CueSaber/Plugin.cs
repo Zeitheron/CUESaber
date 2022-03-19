@@ -1,7 +1,6 @@
 ﻿using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
-using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
 using HarmonyLib;
 using System.Reflection;
