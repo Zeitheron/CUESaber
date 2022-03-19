@@ -7,6 +7,7 @@ using HarmonyLib;
 using System.Reflection;
 using CUESaber.Native.Corsair;
 using CUESaber.CueSaber.Compat;
+using CUESaber.Native.Logitech;
 
 namespace CUESaber
 {
@@ -40,6 +41,7 @@ namespace CUESaber
         {
             Configuration.PluginConfig.Instance = conf.Generated<Configuration.PluginConfig>();
             CUESDK.Reload();
+            LogitechGSDK.Reload();
             Log.Debug("Config loaded");
             RGBEngine.Start();
         }

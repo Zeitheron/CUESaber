@@ -3,11 +3,18 @@
   "id": "CUESaber",
   "name": "CUESaber",
   "author": "Zeitheron",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "RGB integration for Beat Saber!",
   "gameVersion": "1.20.0",
   "dependsOn": {
     "BSIPA": "^4.0.5"
   },
+  "files":[
+    "Libs/AuraSdk_x64.dll",
+	"Libs/Native/CUESDK-x64.dll",
+	"Libs/Native/CUESDK-x86.dll",
+	"Libs/Native/LogitechLedEnginesWrapper-x64.dll",
+	"Libs/Native/LogitechLedEnginesWrapper-x86.dll"
+  ],
   "features": []
 }

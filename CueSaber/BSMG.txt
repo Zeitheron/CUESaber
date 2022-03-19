@@ -1,0 +1,8 @@
+**CUE Saber v1.2.6 for BeatSaber v1.20.0**
+
+Sync your iCUE & Logitech RGB-capable peripherals with Beat Saber.
+Supports custom colors & Chroma!
+I don't know why would you ever really need this unless you want to host a party and impress your friends :w_shrug: 
+
+Download from GitHub: <https://github.com/Zeitheron/CUESaber/releases>
+Demo: https://youtu.be/OnoWIfu3FOY

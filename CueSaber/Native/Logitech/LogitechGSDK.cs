@@ -167,16 +167,16 @@ namespace CUESaber.Native.Logitech
 
         internal static void Reload()
         {
-            UnloadCUESDK();
-            LoadCUESDK();
+            UnloadSDK();
+            LoadSDK();
         }
 
         internal static void Shutdown()
         {
-            UnloadCUESDK();
+            UnloadSDK();
         }
 
-        private static void LoadCUESDK()
+        private static void LoadSDK()
         {
             if (_dllHandle != IntPtr.Zero) return;
 
@@ -193,6 +193,8 @@ namespace CUESaber.Native.Logitech
                 return;
             }
 
+            Plugin.Log.Info($"Loading LogitechG-SDK from '{Path.GetFullPath(target)}'");
+
             _dllHandle = LoadLibrary(dllPath);
 
             _logiLedInitPtr = (LogiLedInitPointer)Marshal.GetDelegateForFunctionPointer(GetProcAddress(_dllHandle, "LogiLedInit"), typeof(LogiLedInitPointer));
@@ -205,7 +207,7 @@ namespace CUESaber.Native.Logitech
             isLoaded = true;
         }
 
-        private static void UnloadCUESDK()
+        private static void UnloadSDK()
         {
             isLoaded = false;
             if (_dllHandle == IntPtr.Zero) return;

@@ -22,16 +22,16 @@ namespace CUESaber.Native.Corsair
 
         internal static void Reload()
         {
-            UnloadCUESDK();
-            LoadCUESDK();
+            UnloadSDK();
+            LoadSDK();
         }
 
         internal static void Shutdown()
         {
-            UnloadCUESDK();
+            UnloadSDK();
         }
 
-        private static void LoadCUESDK()
+        private static void LoadSDK()
         {
             if (_dllHandle != IntPtr.Zero) return;
 
@@ -47,6 +47,8 @@ namespace CUESaber.Native.Corsair
                 Plugin.Log.Error($"Can't find the CUE-SDK at the expected location: '{Path.GetFullPath(target)}'");
                 return;
             }
+
+            Plugin.Log.Info($"Loading CUE-SDK from '{Path.GetFullPath(target)}'");
 
             _dllHandle = LoadLibrary(dllPath);
 
@@ -66,7 +68,7 @@ namespace CUESaber.Native.Corsair
             isLoaded = true;
         }
 
-        private static void UnloadCUESDK()
+        private static void UnloadSDK()
         {
             isLoaded = false;
             if (_dllHandle == IntPtr.Zero) return;
