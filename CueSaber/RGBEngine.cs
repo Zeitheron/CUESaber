@@ -177,7 +177,7 @@ namespace CUESaber
                 noise = new OpenSimplexNoise();
 
                 autoEvent = new AutoResetEvent(false);
-                timer = new Timer(Tick, autoEvent, 0, 1000 / 90);
+                timer = new Timer(Tick, autoEvent, 0, 1000 / 45);
 
                 DebugLogger.debug($"RGB Engine started with {RGB.GetWrapperCount()} wrappers.");
             } else

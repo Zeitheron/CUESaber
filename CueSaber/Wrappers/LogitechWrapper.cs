@@ -69,10 +69,16 @@ namespace CUESaber.CueSaber.Wrappers
         {
             if (LogitechGSDK.LogiLedInitWithName(Plugin.PLUGIN_NAME))
             {
+                LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
+                LogitechGSDK.LogiLedSetLighting(0, 0, 0);
+
                 for (int i = 0; i < 126; ++i)
                     allLeds.Add(new LogiLedKeyboard(i));
                 allLeds.Add(new LogiLedSingleLight(126));
+
+                return true;
             }
+
             return false;
         }
 

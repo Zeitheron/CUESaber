@@ -18,7 +18,7 @@ namespace CUESaber.CueSaber.Native.Logitech
 
         public void Apply()
         {
-            if (LogitechGSDK.LogiLedSetTargetDevice(4))
+            if (LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_PERKEY_RGB))
             {
                 LogitechGSDK.LogiLedSetLightingFromBitmap(colors);
             }
@@ -37,7 +37,7 @@ namespace CUESaber.CueSaber.Native.Logitech
 
         public void Apply()
         {
-            if (LogitechGSDK.LogiLedSetTargetDevice(2))
+            if (LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_RGB))
             {
                 LogitechGSDK.LogiLedSetLighting(rp, gp, bp);
             }
